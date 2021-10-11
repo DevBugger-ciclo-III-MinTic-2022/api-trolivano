@@ -98,6 +98,82 @@ app.delete('/productos/eliminar', (req,res) =>{
     });
 });
 
+//***USUARIOS ****/
+app.get('/usuarios', (req, res) => {
+    console.log('Alguien hizo get');
+    conexion
+    .collection('usuario')
+    .find({}).limit(50)
+    .toArray((err, result)=>{
+        if(err){
+            res.status(500).send('Error consultando los usuarios');
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+app.post('/usuarios/nuevo', (req, res) => {
+    //req.body es un objeto por lo tanto puedo pedir la llave:valor
+   const datosUsuario = req.body;
+   console.log('llaves', Object.keys(datosUsuario));
+   try {
+    if(
+        Object.keys(datosUsuario).includes('nombre') && 
+        Object.keys(datosUsuario).includes('correo') &&  
+        Object.keys(datosUsuario).includes('rol')
+    )  {
+        //implementar codigo para crear producto en la BD
+        conexion.collection('usuario').insertOne(datosUsuario, (err, result)=>{
+            if(err) {
+                console.error(err);
+                res.sendStatus(500);
+            } else {
+                console.log(result);
+                res.sendStatus(200);
+            }
+        });
+    } else {
+        res.sendStatus(500);
+    } 
+   } catch (error) {
+    res.sendStatus(500);
+   }
+
+});
+
+app.patch('/usuarios/editar',(req,res)=>{
+    const edicion = req.body;
+    const filtroUsuario = {_id: new ObjectId(edicion.id)}
+    //si hago envio del id por el body tengo que hacer esto:
+    delete edicion.id;
+    const operacion = {
+        $set: edicion,
+    };
+    conexion.collection('usuario')
+    .findOneAndUpdate(filtroUsuario,operacion,{upsert: true, returnOriginal: true}, (err, result)=>{
+        if(err) {
+            console.error('Error actualizando el usuario: ', err),
+            res.sendStatus(500);
+        } else {
+            console.log('Actualizado con éxito');
+            res.sendStatus(200);
+        }
+    });
+});
+
+app.delete('/usuarios/eliminar', (req,res) =>{
+    const filtroProducto = {_id : new ObjectId(req.body.id)};
+    conexion.collection('usuario').deleteOne(filtroUsuario, (err, result)=>{
+        if(err) {
+            console.error(500);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+});
+
 //este main primero se va a conectar a la BD y luego 
 //retorna ese app.listen
 const main = ()=>{
