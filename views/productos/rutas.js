@@ -9,6 +9,7 @@ const rutasProductos = Express.Router();
 
 const genericoCallback = (res) => (err, result) => {
     if (err) {
+        console.log('error', err);
         res.status(500).json({error: err});
       } else {
         res.json(result);

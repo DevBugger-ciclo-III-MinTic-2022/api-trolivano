@@ -7,9 +7,18 @@ const queryProductos = async (callback) => {
 };
 
 const crearProducto = async (datosProducto, callback) => {
+  if (
+    Object.keys(datosProducto).includes('nombre') &&
+    Object.keys(datosProducto).includes('cantidad') &&
+    Object.keys(datosProducto).includes('precio')
+  ) {
     const conexion = getBD();
-    // implementar código para crear vehículo en la BD
+    // implementar código para crear producto en la BD
+
     await conexion.collection('producto').insertOne(datosProducto, callback);
+  } else {
+    return 'error';
+  }
 };
 
 const consultarProducto = async (id, callback) => {
