@@ -8,6 +8,7 @@ const queryVentas = async (callback) => {
 };
 
 const crearVenta = async (datosVenta, callback) => {
+  console.log('Se ha registrado una venta');
   const conexion = getBD();
   await conexion.collection('venta').insertOne(datosVenta, callback);
 };

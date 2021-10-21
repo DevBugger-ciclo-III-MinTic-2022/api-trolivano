@@ -1,9 +1,10 @@
 import Express from 'express';
 import { queryUsuario, 
     crearUsuario, 
-    consultarUsuario, 
-    editarUsuario, 
-    eliminarUsuario} from '../../controlador/usuarios/controlador.js'
+    editarUsuario,
+    consultarUsuario,   
+    eliminarUsuario,
+    consultarOCrearUsuario} from '../../controlador/usuarios/controlador.js'
 
 const rutasUsuarios = Express.Router();
 
@@ -23,6 +24,12 @@ rutasUsuarios.route('/usuarios').get((req, res) => {
 rutasUsuarios.route('/usuarios').post((req, res) => {
     //req.body es un objeto por lo tanto puedo pedir la llave:valor
    crearUsuario(req.body, genericoCallback(res));
+});
+
+rutasUsuarios.route('/usuarios/self').get((req, res) => {
+  console.log('alguien hizo get en la ruta /self');
+  consultarOCrearUsuario(req, genericoCallback(res));
+  //consultarUsuario(req.params.id, genericoCallback(res));
 });
 
 rutasUsuarios.route('/usuarios/:id').get((req, res) => {
