@@ -11,6 +11,8 @@ import autorizacionEstadoUsuario from './middelware/autorizacionEstadoUsuario.js
 
 dotenv.config({path: './.env'});
 
+const port = process.env.PORT || 5000;
+
 const app = Express();
 //Extrae la info y me entrega los datos que necesito
 app.use(Express.json());
@@ -39,8 +41,8 @@ app.use(rutasVentas)
 //este main primero se va a conectar a la BD y luego 
 //retorna ese app.listen
 const main = () => {
-    return app.listen(process.env.PORT,()=>{
-    console.log(`Escuchando puerto ${process.env.PORT}`);
+    return app.listen(port,()=>{
+    console.log(`Escuchando puerto ${port}`);
     });
 };
 
